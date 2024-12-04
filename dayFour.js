@@ -179,13 +179,13 @@ for (let y = 0; y < letters.length; y++) {
       // console.log('X', x, y);
       let count = findXmas(x, y)
       if (count) {
-        console.log('xmas', x, y);
-        console.log(xmass += count);
+        // console.log('xmas', x, y);
+        // console.log(xmass += count);
       }
     }
   }
 }
-console.log('🎄', xmass);
+// console.log('🎄', xmass);
 
 function findXmas(sx, sy) {
   let reach = 2
@@ -199,16 +199,14 @@ function findXmas(sx, sy) {
       let y = sy + yp
       // console.log('searching', searching, x, y);
       const M = letters[y] ? letters[y][x] : ''
-      const A = letters[y + yp] ? letters[y + yp][x + xp] : ''
       const S = letters[y + yp + yp] ? letters[y + yp + yp][x + xp + xp] : ''
-      if (M == 'M' && A == 'A' && S == 'S') {
+      if (M == 'M' && S == 'S') {
         // console.log('found', x, y, M, A, S);
         let clone = [...letters.map(l => l.split(''))]
-        clone[sy][sx] = '❎'
         clone[y][x] = '🙈'
         clone[y + yp][x + xp] = '🅰️'
         clone[y + yp + yp][x + xp + xp] = '🐍'
-        console.log(clone.map(l => l.join(' ')).join('\n'))
+        // console.log(clone.map(l => l.join(' ')).join('\n'))
         count++
       }
       xp++
@@ -216,4 +214,45 @@ function findXmas(sx, sy) {
     yp++
   }
   return count
+}
+
+// part twolet letters = input
+let mass = 0
+let clone = [...letters.map(l => l.split(''))]
+
+for (let y = 0; y < letters.length; y++) {
+  for (let x = 0; x < letters[y].length; x++) {
+    const cell = letters[y][x]
+    if (cell == 'A') {
+      console.log('A', x, y);
+      let count = findMas(x, y)
+      if (count > 0) {
+        // console.log('MAS', x, y);
+        mass += count
+      }
+    }
+  }
+}
+console.log(clone.map(l => l.join(' ')).join('\n'))
+console.log('🎄', mass);
+
+
+function findMas(sx, sy) {
+  let reach = [[-1, -1], [1, 1], [-1, 1], [1, -1]]
+  let map = ''
+  let solutions = /MSMS|SMMS|MSSM|SMSM/
+  for (let i = 0; i < reach.length; i++) {
+    let pos = reach[i]
+    let x = sx + pos[0]
+    let y = sy + pos[1]
+    let char = letters[y] ? letters[y][x] : ''
+    map += char
+    console.log('--', char);
+  }
+  if (solutions.test(map)) {
+    clone[sy][sx] = '🎄'
+    console.log('LIVE MAS', sx, sy)
+    return 1
+  }
+  return 0
 }
